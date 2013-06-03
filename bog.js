@@ -17,7 +17,7 @@ config[process.pid] = {
 
 log = function (level, args) {
     var conf = config[process.pid], _ref;
-    if (!(_ref = conf[level]).on) return;
+    if (!(_ref = conf[level]).on || !_ref.out) return;
     args = conf.format(level, args);
     _ref.out.apply(null, args);
 };
