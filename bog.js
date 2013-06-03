@@ -1,61 +1,66 @@
 
 // singleton, hashed by pid
-var setup = {}
+var config = {}
 
 // default setup
-setup[process.pid] = {
-    debug: false,
-    info: true,
-    warn: true,
-    error: true,
-    out: console.out,
-    err: console.err,
-    format: function(args) {
+config[process.pid] = {
+    debug: {on: false, out: console.log},
+    info: {on: true, out: console.log},
+    warn: {on: true, out: console.error},
+    error: {on: true, out: console.error},
+    format: function(level, args) {
+        args.unshift(level.toUpperCase());
         args.unshift((new Date()).toISOString());
+        return args;
     }
 };
 
-var log = function (channel, args) {
-    channel.apply(null, format);
+log = function (level, args) {
+    var conf = config[process.pid], _ref;
+    if (!(_ref = conf[level]).on) return;
+    args = conf.format(level, args);
+    _ref.out.apply(null, args);
 };
 
-arr_slice = Array.prototype.slice;
+slice = Array.prototype.slice;
 
 debug = function() {
-    var _ref;
-    if (!(_ref = setup[process.pid]).debug) return;
-    log(_ref.out,arguments);
+    log('debug', slice.call(arguments));
 };
 info = function() {
-    var _ref;
-    if (!(_ref = setup[process.pid]).info) return;
-    log(,_ref.out,arguments);
+    log('info', slice.call(arguments));
 };
 warn = function() {
-    var _ref;
-    if (!(_ref = setup[process.pid]).warn) return;
-    log(_ref.err,arguments);
+    log('warn', slice.call(arguments));
 };
 error = function() {
-    var _ref;
-    if ((!_ref = setup[process.pid]).warn) return;
-    log(_ref.err,arguments);
+    log('error', slice.call(arguments));
 };
 
 level = function (l) {
-    var s = setup[process.pid];
-    s.debug = s.info = s.warn = s.error = false;
+    var s = config[process.pid];
+    [s.debug, s.info, s.warn, s.error].forEach(function(item) {
+        item.on = false;
+    });
     switch (l) {
         case 'debug':
-        s.debug = true;
+        s.debug.on = true;
         case 'info':
-        s.info = true;
+        s.info.on = true;
         case 'warn':
-        s.warn = true;
+        s.warn.on = true;
         case 'error':
-        s.error = true;
+        s.error.on = true;
     }
 }
+
+redirect = function (out, err) {
+    var s = config[process.pid];
+    s.debug.out = out;
+    s.info.out = out;
+    s.warn.out = err;
+    s.error.out = err;
+};
 
 module.exports = {
     debug: debug,
@@ -63,5 +68,6 @@ module.exports = {
     warn: warn,
     error: error,
     level: level,
-    setup: setup
+    redirect: redirect,
+    config: config
 };
