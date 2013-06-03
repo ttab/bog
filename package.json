@@ -1,0 +1,15 @@
+{
+  "author": "Martin Algesten <martin@algesten.se>",
+  "name": "bog",
+  "description": "Thinnest possible logging",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ttab/bog"
+  },
+  "main": "./bog.js",
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "keywords": ["log", "logging", "ligh", "lightweight"]
+}
