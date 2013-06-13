@@ -70,5 +70,5 @@ module.exports = {
     error: error,
     level: level,
     redirect: redirect,
-    config: config
+    config: function() { return config[process.pid] }
 };

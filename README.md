@@ -106,14 +106,14 @@ log.redirect(null, null); // silences all logging
 log.redirect(console.log, console.error); // reinstates defaults
 ```
 
-### log.config
+### log.config()
 
 Spills the beans of the internal config. Can be used to alter the formatting.
 
 #### Example
 
 ```javascript
-log.config.format = function(level, args) {
+log.config().format = function(level, args) {
     if (level === 'info') {
         args.unshift('Prepended');
         args.push('Appended');
