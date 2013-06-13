@@ -7,9 +7,10 @@ too many log frameworks. This library should not be used, but if you
 decide to anyway, you get the following:
 
 * Timestamped log lines.
-* Log levels: `DEBUG`, `INFO`, `WARN`, ERROR**
+* Log levels: `DEBUG`, `INFO`, `WARN`, `ERROR`
 * Possible to redirect.
 * Reasonable defaults.
+* Singleton
 
 ## Defaults
 
@@ -105,7 +106,7 @@ log.redirect(null, null); // silences all logging
 log.redirect(console.log, console.error); // reinstates defaults
 ```
 
-### log.config()
+### log.config
 
 Spills the beans of the internal config. Can be used to alter the formatting.
 
