@@ -25,6 +25,11 @@ The default time format is
 no extra date formatting routines
 ([Date#toISOString](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString)).
 
+## Install
+```
+npm install bog
+```
+
 ## Example
 
 ```javascript
@@ -37,11 +42,6 @@ Would produce:
 
 ```
 2013-06-13T19:05:35.482Z INFO Something wonderful has happened Your AMIGA is alive !!!
-```
-
-## Install
-```
-npm install bog
 ```
 
 ## API
