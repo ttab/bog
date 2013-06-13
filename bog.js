@@ -1,6 +1,7 @@
+/*global process, module*/
 
 // singleton, hashed by pid
-var config = {}
+var config = {};
 
 // default setup
 config[process.pid] = {
@@ -15,29 +16,29 @@ config[process.pid] = {
     }
 };
 
-log = function (level, args) {
+var log = function (level, args) {
     var conf = config[process.pid], _ref;
     if (!(_ref = conf[level]).on || !_ref.out) return;
     args = conf.format(level, args);
     _ref.out.apply(null, args);
 };
 
-slice = Array.prototype.slice;
+var slice = Array.prototype.slice;
 
-debug = function() {
+var debug = function() {
     log('debug', slice.call(arguments));
 };
-info = function() {
+var info = function() {
     log('info', slice.call(arguments));
 };
-warn = function() {
+var warn = function() {
     log('warn', slice.call(arguments));
 };
-error = function() {
+var error = function() {
     log('error', slice.call(arguments));
 };
 
-level = function (l) {
+var level = function (l) {
     var s = config[process.pid];
     [s.debug, s.info, s.warn, s.error].forEach(function(item) {
         item.on = false;
@@ -52,9 +53,9 @@ level = function (l) {
         case 'error':
         s.error.on = true;
     }
-}
+};
 
-redirect = function (out, err) {
+var redirect = function (out, err) {
     var s = config[process.pid];
     s.debug.out = out;
     s.info.out = out;
