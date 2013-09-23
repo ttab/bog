@@ -1,4 +1,5 @@
 /*global process, module*/
+/*jshint -W086*/ // no `break` before `case` is OK
 
 // singleton, hashed by pid
 var config = {};
@@ -70,5 +71,5 @@ module.exports = {
     error: error,
     level: level,
     redirect: redirect,
-    config: function() { return config[process.pid] }
+    config: function() { return config[process.pid]; }
 };
