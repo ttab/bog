@@ -9,7 +9,7 @@
   },
   "main": "./bog.js",
   "engines": {
-    "node": ">= 0.10.0"
+    "node": "*"
   },
   "licenses": [
     {
