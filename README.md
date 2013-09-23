@@ -1,4 +1,3 @@
-
 Simplest Possible Logging
 =========================
 
@@ -122,3 +121,6 @@ log.config().format = function(level, args) {
 };
 ```
 
+## License
+
+MIT License (MIT).
