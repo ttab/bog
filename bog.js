@@ -10,9 +10,11 @@ config[process.pid] = {
     info: {on: true, out: console.log},
     warn: {on: true, out: console.error},
     error: {on: true, out: console.error},
+    includeTimeDesignator: false,
+    includeTimeZone: false,
     format: function(level, args) {
         args.unshift(level.toUpperCase());
-        args.unshift((new Date()).toISOString());
+        args.unshift(localISOString());
         return args;
     }
 };
@@ -62,6 +64,29 @@ var redirect = function (out, err) {
     s.info.out = out;
     s.warn.out = err;
     s.error.out = err;
+};
+
+// ISO8601 in local time zone
+var localISOString = function() {
+
+	var s = config[process.pid]
+        , d = new Date()
+		, pad = function (n){return n<10 ? '0'+n : n;}
+		, tz = typeof s.fixedTimeZoneMinutes === 'number' ? s.fixedTimeZoneMinutes :
+            d.getTimezoneOffset() // mins
+		, tzs = (tz>0?"-":"+") + pad(parseInt(Math.abs(tz/60)));
+
+    tzs += tz%60 == 0 ? '00' : pad(Math.abs(tz%60));
+
+	if (tz === 0) // Zulu time == UTC
+		tzs = 'Z';
+
+	 return d.getFullYear()+'-'
+	      + pad(d.getMonth()+1)+'-'
+	      + pad(d.getDate())+(s.includeTimeDesignator ? 'T' : ' ')+
+	      + pad(d.getHours())+':'
+	      + pad(d.getMinutes())+':'
+	      + pad(d.getSeconds()) + (s.includeTimeZone ? tzs : '');
 };
 
 module.exports = {

@@ -2,7 +2,7 @@
   "author": "Martin Algesten <martin@algesten.se>",
   "name": "bog",
   "description": "Thinnest possible logging",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/ttab/bog"

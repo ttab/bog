@@ -5,7 +5,7 @@ Simplest Possible Logging
 too many log frameworks. This library should not be used, but if you
 decide to anyway, you get the following:
 
-* Timestamped log lines.
+* Timestamped log lines in local time zone.
 * Log levels: `DEBUG`, `INFO`, `WARN`, `ERROR`
 * Possible to redirect.
 * Reasonable defaults.
@@ -19,10 +19,10 @@ warnings and errors are.
 By default `DEBUG` and `INFO` go to `console.log` (and thus `stdout`),
 while `WARN` and `ERROR` go to `console.error` (thus `stderr`).
 
+*** 1.0.0 - changed to local time zone. Earlier versions times were always in Zulu.
+
 The default time format is
-[ISO8601](http://en.wikipedia.org/wiki/ISO_8601) because that requires
-no extra date formatting routines
-([Date#toISOString](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString)).
+[ISO8601](http://en.wikipedia.org/wiki/ISO_8601) in the local time zone.
 
 ## Install
 ```
@@ -40,7 +40,7 @@ log.info('Something wonderful has happened Your AMIGA is alive !!!');
 Would produce:
 
 ```
-2013-06-13T19:05:35.482Z INFO Something wonderful has happened Your AMIGA is alive !!!
+2013-06-13 19:05:35.482 INFO Something wonderful has happened Your AMIGA is alive !!!
 ```
 
 ## API
@@ -63,7 +63,7 @@ log.info('and, even', 'better...');
 Outputs
 
 ```
-2013-06-13T19:05:35.482Z INFO and even better...
+2013-06-13 19:05:35.482 INFO and even better...
 ```
 
 N.b. The above is conceptually the same as
@@ -120,6 +120,27 @@ log.config().format = function(level, args) {
     return args;
 };
 ```
+
+### Enable ISO8601 time designator 'T' and timezone
+
+*** Since 1.0.0
+
+It's possible to turn on the time designator and timezone.
+
+```javascript
+log.config().includeTimeDesignator = true;
+log.config().includeTimeZone = true;
+
+log.info('Something wonderful has happened Your AMIGA is alive !!!');
+```
+
+If machine timezone is India this would produce:
+
+```
+2013-06-13T19:05:35.482+0530 INFO Something wonderful has happened Your AMIGA is alive !!!
+```
+
+Notice that zulu (GMT) time is denoted by a 'Z'.
 
 ## License
 
