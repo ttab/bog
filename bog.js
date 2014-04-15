@@ -6,10 +6,10 @@ var config = {};
 
 // default setup
 config[process.pid] = {
-    debug: {on: false, out: console.log},
-    info: {on: true, out: console.log},
-    warn: {on: true, out: console.error},
-    error: {on: true, out: console.error},
+    debug: {on: false, out: console.log.bind(console)},
+    info: {on: true, out: console.log.bind(console)},
+    warn: {on: true, out: console.error.bind(console)},
+    error: {on: true, out: console.error.bind(console)},
     includeTimeDesignator: false,
     includeTimeZone: false,
     format: function(level, args) {
