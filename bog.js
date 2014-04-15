@@ -69,24 +69,24 @@ var redirect = function (out, err) {
 // ISO8601 in local time zone
 var localISOString = function() {
 
-	var s = config[process.pid]
+    var s = config[process.pid]
         , d = new Date()
-		, pad = function (n){return n<10 ? '0'+n : n;}
-		, tz = typeof s.fixedTimeZoneMinutes === 'number' ? s.fixedTimeZoneMinutes :
+        , pad = function (n){return n<10 ? '0'+n : n;}
+        , tz = typeof s.fixedTimeZoneMinutes === 'number' ? s.fixedTimeZoneMinutes :
             d.getTimezoneOffset() // mins
-		, tzs = (tz>0?"-":"+") + pad(parseInt(Math.abs(tz/60)));
+        , tzs = (tz>0?"-":"+") + pad(parseInt(Math.abs(tz/60)));
 
     tzs += tz%60 == 0 ? '00' : pad(Math.abs(tz%60));
 
-	if (tz === 0) // Zulu time == UTC
-		tzs = 'Z';
+    if (tz === 0) // Zulu time == UTC
+        tzs = 'Z';
 
-	 return d.getFullYear()+'-'
-	      + pad(d.getMonth()+1)+'-'
-	      + pad(d.getDate())+(s.includeTimeDesignator ? 'T' : ' ')+
-	      + pad(d.getHours())+':'
-	      + pad(d.getMinutes())+':'
-	      + pad(d.getSeconds()) + (s.includeTimeZone ? tzs : '');
+     return d.getFullYear()+'-'
+          + pad(d.getMonth()+1)+'-'
+          + pad(d.getDate())+(s.includeTimeDesignator ? 'T' : ' ')+
+          + pad(d.getHours())+':'
+          + pad(d.getMinutes())+':'
+          + pad(d.getSeconds()) + (s.includeTimeZone ? tzs : '');
 };
 
 module.exports = {
