@@ -9,18 +9,34 @@ var conf = {
     error: {on: true, out: console.error.bind(console)},
     includeTimeDesignator: false,
     includeTimeZone: false,
-    format: function(level, args) {
-        args.unshift(level.toUpperCase());
-        args.unshift(localISOString());
-        return args;
-    }
+    logobject: function(level, args) {
+        var d = new Date();
+        return {
+            timestamp: d.getTime(),
+            datetime: localISOString(d),
+            level: level.toUpperCase(),
+            args: args
+        };
+    },
+    format: null,
+    callback: null
 };
 
 var log = function (level, args) {
-    var _ref;
-    if (!(_ref = conf[level]).on || !_ref.out) return;
-    args = conf.format(level, args);
-    _ref.out.apply(null, args);
+    var o, output;
+    output = conf[level];
+    o = conf.logobject(level, args);
+    if (conf.callback) {
+        conf.callback(o);
+    }
+    if (output.on && output.out) {
+        if (conf.format) {
+            // backwards compatibility
+            output.out.apply(null, conf.format(level, args));
+        } else {
+            output.out.apply(null, [].concat(o.datetime, o.level, args));
+        }
+    }
 };
 
 var slice = Array.prototype.slice;
@@ -62,10 +78,9 @@ var redirect = function (out, err) {
 };
 
 // ISO8601 in local time zone
-var localISOString = function() {
+var localISOString = function(d) {
 
-    var d = new Date()
-    , pad = function (n){return n<10 ? '0'+n : n;}
+    var pad = function (n){return n<10 ? '0'+n : n;}
     , tz = typeof conf.fixedTimeZoneMinutes === 'number' ? conf.fixedTimeZoneMinutes :
             d.getTimezoneOffset() // mins
     , tzs = (tz>0?"-":"+") + pad(parseInt(Math.abs(tz/60)));
@@ -83,6 +98,13 @@ var localISOString = function() {
         + pad(d.getSeconds()) + (conf.includeTimeZone ? tzs : '');
 };
 
+var callback = function(cb) {
+    if (typeof cb != "function") {
+        throw new Error("Callback must be a function");
+    }
+    conf.callback = cb;
+};
+
 module.exports = {
     debug: debug,
     info: info,
@@ -90,5 +112,6 @@ module.exports = {
     error: error,
     level: level,
     redirect: redirect,
+    callback: callback,
     config: function() { return conf; }
 };

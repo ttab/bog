@@ -105,11 +105,27 @@ log.redirect(null, null); // silences all logging
 log.redirect(console.log, console.error); // reinstates defaults
 ```
 
+### log.callback()
+
+Set a callback function for each log message. The callback 
+will receive an object like this:
+
+```javascript
+{
+  "timestamp": 1462947947643,
+  "datetime" : "2016-05-11 8:25:47",
+  "level"    : "INFO",
+  "args"     : ["This is the", "arguments array"]
+}
+```
+
 ### log.config()
 
 Spills the beans of the internal config. Can be used to alter the formatting.
 
-#### Example
+#### Example (deprecated)
+
+This formatting is deprecated, do not use.
 
 ```javascript
 log.config().format = function(level, args) {

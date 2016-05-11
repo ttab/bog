@@ -8,12 +8,9 @@ log.config().includeTimeZone = true;
 
 log.info('Something wonderful has happened Your AMIGA is alive !!!');
 
-log.config().format = function (level, args) {
-    if (level === 'warn') {
-        args.unshift('pre');
-        args.push('post');
-    }
-    return args;
-};
+// get a callback for each message
+log.callback(function(o) {
+    console.log(o);
+});
 
-log.warn('this');
+log.info("This is the", "arguments array");
