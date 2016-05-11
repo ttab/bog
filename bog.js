@@ -43,13 +43,13 @@ var level = function (l) {
         item.on = false;
     });
     switch (l) {
-        case 'debug':
+    case 'debug':
         conf.debug.on = true;
-        case 'info':
+    case 'info':
         conf.info.on = true;
-        case 'warn':
+    case 'warn':
         conf.warn.on = true;
-        case 'error':
+    case 'error':
         conf.error.on = true;
     }
 };
@@ -65,22 +65,22 @@ var redirect = function (out, err) {
 var localISOString = function() {
 
     var d = new Date()
-        , pad = function (n){return n<10 ? '0'+n : n;}
-        , tz = typeof conf.fixedTimeZoneMinutes === 'number' ? conf.fixedTimeZoneMinutes :
+    , pad = function (n){return n<10 ? '0'+n : n;}
+    , tz = typeof conf.fixedTimeZoneMinutes === 'number' ? conf.fixedTimeZoneMinutes :
             d.getTimezoneOffset() // mins
-        , tzs = (tz>0?"-":"+") + pad(parseInt(Math.abs(tz/60)));
+    , tzs = (tz>0?"-":"+") + pad(parseInt(Math.abs(tz/60)));
 
     tzs += tz%60 == 0 ? '00' : pad(Math.abs(tz%60));
 
     if (tz === 0) // Zulu time == UTC
         tzs = 'Z';
 
-     return d.getFullYear()+'-'
-          + pad(d.getMonth()+1)+'-'
-          + pad(d.getDate())+(conf.includeTimeDesignator ? 'T' : ' ')+
-          + pad(d.getHours())+':'
-          + pad(d.getMinutes())+':'
-          + pad(d.getSeconds()) + (conf.includeTimeZone ? tzs : '');
+    return d.getFullYear()+'-'
+        + pad(d.getMonth()+1)+'-'
+        + pad(d.getDate())+(conf.includeTimeDesignator ? 'T' : ' ')+
+        + pad(d.getHours())+':'
+        + pad(d.getMinutes())+':'
+        + pad(d.getSeconds()) + (conf.includeTimeZone ? tzs : '');
 };
 
 module.exports = {
