@@ -1,11 +1,8 @@
 /*global process, module*/
 /*jshint -W086*/ // no `break` before `case` is OK
 
-// singleton, hashed by pid
-var config = {};
-
-// default setup
-config[process.pid] = {
+// default setup singleton
+var conf = {
     debug: {on: false, out: console.log.bind(console)},
     info: {on: true, out: console.log.bind(console)},
     warn: {on: true, out: console.error.bind(console)},
@@ -20,7 +17,7 @@ config[process.pid] = {
 };
 
 var log = function (level, args) {
-    var conf = config[process.pid], _ref;
+    var _ref;
     if (!(_ref = conf[level]).on || !_ref.out) return;
     args = conf.format(level, args);
     _ref.out.apply(null, args);
@@ -42,37 +39,34 @@ var error = function() {
 };
 
 var level = function (l) {
-    var s = config[process.pid];
-    [s.debug, s.info, s.warn, s.error].forEach(function(item) {
+    [conf.debug, conf.info, conf.warn, conf.error].forEach(function(item) {
         item.on = false;
     });
     switch (l) {
         case 'debug':
-        s.debug.on = true;
+        conf.debug.on = true;
         case 'info':
-        s.info.on = true;
+        conf.info.on = true;
         case 'warn':
-        s.warn.on = true;
+        conf.warn.on = true;
         case 'error':
-        s.error.on = true;
+        conf.error.on = true;
     }
 };
 
 var redirect = function (out, err) {
-    var s = config[process.pid];
-    s.debug.out = out;
-    s.info.out = out;
-    s.warn.out = err;
-    s.error.out = err;
+    conf.debug.out = out;
+    conf.info.out = out;
+    conf.warn.out = err;
+    conf.error.out = err;
 };
 
 // ISO8601 in local time zone
 var localISOString = function() {
 
-    var s = config[process.pid]
-        , d = new Date()
+    var d = new Date()
         , pad = function (n){return n<10 ? '0'+n : n;}
-        , tz = typeof s.fixedTimeZoneMinutes === 'number' ? s.fixedTimeZoneMinutes :
+        , tz = typeof conf.fixedTimeZoneMinutes === 'number' ? conf.fixedTimeZoneMinutes :
             d.getTimezoneOffset() // mins
         , tzs = (tz>0?"-":"+") + pad(parseInt(Math.abs(tz/60)));
 
@@ -83,10 +77,10 @@ var localISOString = function() {
 
      return d.getFullYear()+'-'
           + pad(d.getMonth()+1)+'-'
-          + pad(d.getDate())+(s.includeTimeDesignator ? 'T' : ' ')+
+          + pad(d.getDate())+(conf.includeTimeDesignator ? 'T' : ' ')+
           + pad(d.getHours())+':'
           + pad(d.getMinutes())+':'
-          + pad(d.getSeconds()) + (s.includeTimeZone ? tzs : '');
+          + pad(d.getSeconds()) + (conf.includeTimeZone ? tzs : '');
 };
 
 module.exports = {
@@ -96,5 +90,5 @@ module.exports = {
     error: error,
     level: level,
     redirect: redirect,
-    config: function() { return config[process.pid]; }
+    config: function() { return conf; }
 };
