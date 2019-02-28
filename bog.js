@@ -70,6 +70,11 @@ var level = function (l) {
     }
 };
 
+// set log level from environment variable
+if (['debug', 'info', 'warn', 'error'].indexOf(process.env.BOG_LEVEL) > -1) {
+    level(process.env.BOG_LEVEL)
+}
+
 var redirect = function (out, err) {
     conf.debug.out = out;
     conf.info.out = out;
